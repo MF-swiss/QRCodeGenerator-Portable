@@ -102,11 +102,50 @@ Doppelklicke auf `run-portable.bat`.
    testen.
 
 ```mermaid
-flowchart LR
-    A[Anwendung starten] --> B[Text oder URL eingeben]
-    B --> C[QR-Code erzeugen]
-    C --> D[Mit Scanner prüfen]
-    D --> E[Verwenden oder weitergeben]
+flowchart TD
+    A([Start]) --> B[ZIP vollständig entpacken]
+    B --> C{Java 17+ im PATH?}
+    C -- Nein --> C1[Java installieren oder PATH korrigieren]
+    C1 --> C2[java -version prüfen]
+    C2 --> C
+    C -- Ja --> D{JavaFX und JAR vorhanden?}
+    D -- Nein --> D1[Ordnerstruktur und Dateien prüfen]
+    D1 --> D
+    D -- Ja --> E[run-portable.bat starten]
+    E --> F{Anwendung startet?}
+    F -- Nein --> F1[Batch-Datei in Eingabeaufforderung starten]
+    F1 --> F2[Fehlermeldung auswerten]
+    F2 --> C
+    F -- Ja --> G[Text, URL oder Inhalt eingeben]
+    G --> H[QR-Code erzeugen]
+    H --> I{QR-Code lesbar und korrekt?}
+    I -- Nein --> G
+    I -- Ja --> J[Mit Smartphone oder Scanner testen]
+    J --> K{Inhalt korrekt?}
+    K -- Nein --> G
+    K -- Ja --> L([QR-Code erfolgreich erstellt])
+    L --> M[QR-Code in der Anwendung nutzen oder weitergeben]
+
+    subgraph Vorbereitung
+        B
+        C
+        C1
+        C2
+        D
+        D1
+    end
+
+    subgraph Anwendung
+        E
+        F
+        F1
+        F2
+        G
+        H
+        I
+        J
+        K
+    end
 ```
 
 ## Start per Eingabeaufforderung
